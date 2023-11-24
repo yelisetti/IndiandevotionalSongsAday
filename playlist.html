@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Play Songs by Day - Devotional Music Player</title>
+  <link href='https://fonts.googleapis.com/css?family=Allerta' rel='stylesheet'>
+    <link href="styles.css" rel="stylesheet">
+    <script src="./howler.min.js"></script>
+    <style>
+      #message-container{
+        padding-bottom: 20px;
+      }
+    </style>
+</head>
+<body>
+<h1>Play Songs by Day - Devotional Music Player</h1>
+<div id="message-container"></div>
+<audio id="musicPlayer" controls autoplay loop>
+  <source id="audioSource" src="" type="audio/mpeg">
+</audio>
+
+<div id="playlist">
+  <div class="container-audio">
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+    <div class="colum1">
+      <div class="row"></div>
+    </div>
+  </div>
+ </div>
+
+<script>
+
+  setInterval(function(){
+    const time_ = new Date().toLocaleString('en-GB'); // return 24 hour time format in string, explaination about en-GB you can search on wikipedia, thats bored (:
+    let date = time_.split(', ')[0].split('/'); // split the time strings to get date in array [day, month, year]
+    let clock = time_.split(', ')[1].split(':'); // split the time strings to get clock in array [hour, min, sec]
+    countDownTime(Number(clock[0]),Number(clock[1]),Number(clock[2]));
+
+  },1000);
+  function countDownTime(h,m,s){
+    // some match to reverse the clock
+    //document.getElementById('time2').innerHTML = 'countdown to midnight : '+ (23-h)+':'+(59-m)+':'+(60-s);
+    if(h === 0 && m === 0 && s === 1){ itsMidnight(); } // call its midnight 1 sec before clock 00:00:00
+  }
+  function itsMidnight(){
+// its midnight, your function here
+    console.log('midnight! reload.')
+    document.location.reload();
+  }
+
+  // Define your songs and their corresponding days of the week
+  const songs = {
+    "Monday": "Sri_Rudram.mp3",
+    "Tuesday": "Hanuman_Chalisa.mp3",
+    "Wednesday": "Ganesh_Bhajans.mp3",
+    "Thursday": "Vishnu_Sahasranamam.mp3",
+    "Friday": "Sri_Lalitha_Sahasranamam.mp3",
+    "Saturday": "Hanuman_Chalisa.mp3",
+    "Sunday": "Hanuman_Chalisa.mp3"
+  };
+
+  // Create the playlist dynamically
+  // const playlist = document.getElementById("playlist").querySelector("ul");
+
+  // Get references to the audio player and audio source
+  const musicPlayer = document.getElementById("musicPlayer");
+  const audioSource = document.getElementById("audioSource");
+
+  for (const day in songs) {
+    const listItem = document.createElement("li");
+    listItem.textContent = `${day} - ${songs[day]}`;
+    listItem.addEventListener("click", () => playSong(songs[day]));
+    // playlist.appendChild(listItem);
+  }
+
+  // Function to play a song
+  function playSong(song) {
+    const audioSource = document.getElementById("audioSource");
+    const musicPlayer = new Howl({ src: [song] });
+    audioSource.src = song;
+    musicPlayer.play();
+  }
+
+  // Automatically select and play the song of the day
+  const today = new Date().toLocaleString('en-us', { weekday: 'long' });
+  if (songs[today]) {
+    audioSource.src = (songs[today]);
+    musicPlayer.load();
+    musicPlayer.play();
+  } else {
+    console.error(`No song found for ${today}`);
+  }
+
+  const currentDate = new Date();
+  const formattedDate = currentDate.toDateString();
+  const songMsg = `Today is ${formattedDate}, playing song: ${songs[today]}`;
+  const messageContainer = document.getElementById('message-container');
+  messageContainer.innerHTML = songMsg;
+
+</script>
+</body>
+</html>

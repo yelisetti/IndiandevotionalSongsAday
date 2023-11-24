@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stylish Playlist</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .playlist-card {
+      width: 300px;
+      margin: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .playlist-card:hover {
+      transform: scale(1.05);
+    }
+
+    .playlist-card h2 {
+      text-align: center;
+    }
+
+    .playlist-card button {
+      width: 100%;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Stylish Playlist</h1>
+
+  <div class="row" id="playlist-container">
+    <!-- Playlists will be displayed here -->
+  </div>
+
+  <div id="audio-player" class="mt-4"></div>
+</div>
+
+<script>
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const playlists = {};
+
+  function addSongToPlaylist(day) {
+    const songUrl = prompt(`Enter a song URL for ${day}'s playlist:`);
+    if (songUrl) {
+      if (!playlists[day]) {
+        playlists[day] = [];
+      }
+      playlists[day].push(songUrl);
+      updatePlaylist(day);
+    }
+  }
+
+  function updatePlaylist(day) {
+    const playlistContainer = document.getElementById('playlist-container');
+    const playlist = playlists[day] || [];
+
+    const playlistCard = document.createElement('div');
+    playlistCard.className = 'col-md-4 playlist-card';
+
+    const playlistTitle = document.createElement('h2');
+    playlistTitle.innerText = day;
+
+    const playButton = document.createElement('button');
+    playButton.className = 'btn btn-primary';
+    playButton.innerText = 'Play Playlist';
+    playButton.addEventListener('click', () => playPlaylist(playlist));
+
+    const songList = document.createElement('ul');
+
+    playlist.forEach(songUrl => {
+      const listItem = document.createElement('li');
+      listItem.innerHTML = `<a href="${songUrl}" target="_blank">${songUrl}</a>`;
+      songList.appendChild(listItem);
+    });
+
+    playlistCard.appendChild(playlistTitle);
+    playlistCard.appendChild(playButton);
+    playlistCard.appendChild(songList);
+
+    playlistContainer.appendChild(playlistCard);
+  }
+
+  function playPlaylist(playlist) {
+    const audioPlayer = document.getElementById('audio-player');
+    audioPlayer.innerHTML = '';
+
+    playlist.forEach(songUrl => {
+      const audio = new Audio(songUrl);
+      audio.controls = true;
+      audioPlayer.appendChild(audio);
+      audio.play();
+    });
+  }
+
+  const playlistContainer = document.getElementById('playlist-container');
+
+  daysOfWeek.forEach(day => {
+    const playlistCard = document.createElement('div');
+    playlistCard.className = 'col-md-4 playlist-card';
+
+    const addSongButton = document.createElement('button');
+    addSongButton.className = 'btn btn-success';
+    addSongButton.innerText = 'Add Song';
+    addSongButton.addEventListener('click', () => addSongToPlaylist(day));
+
+    const playlistTitle = document.createElement('h2');
+    playlistTitle.innerText = day;
+
+    playlistCard.appendChild(playlistTitle);
+    playlistCard.appendChild(addSongButton);
+
+    playlistContainer.appendChild(playlistCard);
+  });
+</script>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
